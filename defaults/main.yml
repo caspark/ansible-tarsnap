@@ -13,6 +13,7 @@ tarsnapper_cron_minute: "0"
 tarsnapper_cron_hour: "*"
 tarsnapper_cron_day: "*"
 tarsnapper_cron_month: "*"
+tarsnapper_cron_weekday: "*"
 
 # default 'target' (archive name) for backups that tarsnapper makes. $name and $date are interpolated by tarsnapper.
 tarsnapper_default_target: "default/$name-$date"

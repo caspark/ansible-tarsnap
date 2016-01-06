@@ -133,3 +133,4 @@
     hour: "{{ tarsnapper_cron_hour }}"
     day: "{{ tarsnapper_cron_day }}"
     month: "{{ tarsnapper_cron_month }}"
+    weekday: "{{ tarsnapper_cron_weekday }}"
