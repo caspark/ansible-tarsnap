@@ -1,11 +1,6 @@
 #!/bin/bash
 
 # ###############################################################################
-# CONFIGURATION
-# ###############################################################################
-CONF="{{ tarsnapper_config_file }}"
-
-# ###############################################################################
 # FUNCTIONS
 # ###############################################################################
 function log {
@@ -33,5 +28,6 @@ exec 2>&1
 # MAIN
 # ###############################################################################
 log "backup generation START"
-tarsnapper -c "$CONF" make
+# arguments to tarsnap (via -o) must be before arguments to tarsnapper
+tarsnapper -o configfile "{{ tarsnap_config_file }}" -c "{{ tarsnapper_config_file }}"  make
 log "backup generation DONE"
