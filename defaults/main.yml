@@ -2,10 +2,10 @@ tarsnap_version: 1.0.36.1
 
 # the actual key that tarsnap should use (this is saved to tarsnap_key_file)
 tarsnap_key_content: |
-You must specify your own key for
-tarsnap here instead of using this one!
-If you do not override the tarsnap_key_content
-variable then tarsnap will not work.
+    You must specify your own key for
+    tarsnap here instead of using this one!
+    If you do not override the tarsnap_key_content
+    variable then tarsnap will not work.
 
 # the frequency with which tarsnapper is run. Must be at least as frequent as the smallest delta of any job.
 # here we run tarsnapper every hour, meaning backup jobs intended to backup more frequently than that will not do so.
