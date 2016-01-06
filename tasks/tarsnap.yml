@@ -70,14 +70,14 @@
   file: state=directory path={{ tarsnap_cache }} owner=root group=root mode=700
 
 - name: Install Tarsnap configuration file
-  template: src=tarsnaprc dest={{ tarsnap_config_file }} owner=root group=root mode=600
+  template: src=tarsnap.conf dest={{ tarsnap_config_file }} owner=root group=root mode=600
 
 - name: Install Tarsnap key file
   copy:
     content: "{{ tarsnap_key_content }}"
     dest: "{{ tarsnap_key_file }}"
 
-- name: Create Tarsnapper directories
+- name: Create Tarsnapper base directory and jobs include directory
   file:
     state: directory
     path: "{{ tarsnapper_include_jobs_dir }}"
