@@ -3,7 +3,7 @@
 # ###############################################################################
 # CONFIGURATION
 # ###############################################################################
-CONF=/root/tarsnapper.conf
+CONF="{{ tarsnap_config_file }}"
 
 # ###############################################################################
 # FUNCTIONS
@@ -24,12 +24,14 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 trap 'failed ${LINENO} ${$?}' ERR
 
-exec > >(tee -a /var/log/tarsnap.log)
+exec > >(tee -a "{{ tarsnap_log_file }}")
 exec 2>&1
+
+. {{ tarsnapper_virtualenv_path }}/bin/activate
 
 # ###############################################################################
 # MAIN
 # ###############################################################################
 log "backup generation START"
-tarsnapper -c $CONF make
+tarsnapper -c "$CONF" make
 log "backup generation DONE"

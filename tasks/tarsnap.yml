@@ -10,34 +10,35 @@
     - libssl-dev
     - zlib1g-dev
     - build-essential
-    - python-setuptools
+    - python-pip
+    - python-virtualenv
 
 - name: Check if tarsnap {{ tarsnap_version }} is installed
   shell: tarsnap --version | grep {{ tarsnap_version }} --color=never
-  register: tarnsap_installed
-  changed_when: "tarnsap_installed.stderr != ''"
+  register: tarsnap_installed
+  changed_when: "tarsnap_installed.stderr != ''"
   ignore_errors: yes
 
 - name: Download the current tarsnap code signing key
-  when: tarnsap_installed|failed
+  when: tarsnap_installed|failed
   get_url:
     url=https://www.tarsnap.com/tarsnap-signing-key.asc
     dest=/root/tarsnap-signing-key.asc
 
 - name: Add the tarsnap code signing key to your list of keys
-  when: tarnsap_installed|failed
+  when: tarsnap_installed|failed
   command:
     gpg --import tarsnap-signing-key.asc
     chdir=/root/
 
 - name: Download tarsnap SHA file
-  when: tarnsap_installed|failed
+  when: tarsnap_installed|failed
   get_url:
     url="https://www.tarsnap.com/download/tarsnap-sigs-{{ tarsnap_version }}.asc"
     dest="/root/tarsnap-sigs-{{ tarsnap_version }}.asc"
 
 - name: get the SHA256sum for this tarsnap release
-  when: tarnsap_installed|failed
+  when: tarsnap_installed|failed
   shell: >
     gpgResult=`gpg --decrypt tarsnap-sigs-{{ tarsnap_version }}.asc 2>/dev/null`;
     echo ${gpgResult#*=};
@@ -47,47 +48,70 @@
   register: tarsnap_sha
 
 - name: Download Tarsnap source
-  when: tarnsap_installed|failed
+  when: tarsnap_installed|failed
   get_url:
     url="https://www.tarsnap.com/download/tarsnap-autoconf-{{ tarsnap_version }}.tgz"
     dest="/root/tarsnap-autoconf-{{ tarsnap_version }}.tgz"
     sha256sum={{ tarsnap_sha.stdout_lines[0] }}
 
 - name: Decompress Tarsnap source
-  when: tarnsap_installed|failed
+  when: tarsnap_installed|failed
   command: tar xzf /root/tarsnap-autoconf-{{ tarsnap_version }}.tgz chdir=/root creates=/root/tarsnap-autoconf-{{ tarsnap_version }}/COPYING
 
 - name: Configure Tarsnap for local build
-  when: tarnsap_installed|failed
+  when: tarsnap_installed|failed
   command: ./configure chdir=/root/tarsnap-autoconf-{{ tarsnap_version }} creates=/root/tarsnap-autoconf-{{ tarsnap_version }}/Makefile
 
 - name: Build and install Tarsnap
-  when: tarnsap_installed|failed
+  when: tarsnap_installed|failed
   command: make all install clean chdir=/root/tarsnap-autoconf-{{ tarsnap_version }} creates=/usr/local/bin/tarsnap
 
 - name: Create Tarsnap cache directory
-  file: state=directory path={{ tarsnap_cache }}
-
-- name: Install tarsnapper wrapper
-  easy_install: name=tarsnapper
-
-- name: Install tarsnapper configuration file
-  copy: src={{ tarsnap_tarsnapper_conf }} dest=/root/tarsnapper.conf mode=644
+  file: state=directory path={{ tarsnap_cache }} owner=root group=root mode=700
 
 - name: Install Tarsnap configuration file
-  template: src=tarsnaprc.j2 dest=/root/.tarsnaprc mode=644
+  template: src=tarsnaprc dest={{ tarsnap_config_file }} owner=root group=root mode=600
+
+- name: Create Tarsnapper directories
+  file:
+    state: directory
+    path: "{{ tarsnapper_include_jobs_dir }}"
+    owner: root
+    group: root
+    mode: u=rwX,g=0,o=0
+    recurse: yes
+
+- name: Create virtual env for tarsnapper
+  command: virtualenv {{ tarsnapper_virtualenv_path }} --no-site-packages
+           creates={{ tarsnapper_virtualenv_path }}/bin/activate
+
+- name: Install tarsnapper wrapper
+  pip:
+    name: tarsnapper
+    virtualenv: "{{ tarsnapper_virtualenv_path }}"
+
+- name: Correct virtual env permissions
+  file:
+    state: directory
+    path: "{{ tarsnapper_virtualenv_path }}"
+    owner: root
+    group: root
+    mode: u=rwX,g=0,o=0
+    recurse: yes
+
+- name: Install tarsnapper configuration file
+  template: src=tarsnapper.conf dest={{ tarsnapper_config_file }} owner=root group=root mode=600
 
 - name: Install tarsnapper backup script
-  copy: src=tarsnap.sh dest=/root/tarsnap.sh mode=755
+  template: src=tarsnapper.sh dest={{ tarsnapper_script_file }} owner=root group=root mode=700
 
 - name: Configure tarsnap logrotate
-  copy: src=etc_logrotate_tarsnap dest=/etc/logrotate.d/tarsnap owner=root group=root mode=0644
+  template: src=etc_logrotate_tarsnap dest=/etc/logrotate.d/tarsnap owner=root group=root mode=0644
 
 - name: Install nightly Tarsnap-generations cronjob
   cron:
-  args:
     name: "Tarsnap backup"
-    job: "/root/tarsnap.sh > /dev/null"
+    job: "{{ tarsnapper_script_file }} > /dev/null"
     minute: "{{ tarsnap_cron_minute }}"
     hour: "{{ tarsnap_cron_hour }}"
     day: "{{ tarsnap_cron_day }}"
