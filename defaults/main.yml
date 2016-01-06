@@ -18,6 +18,8 @@ tarsnapper_cron_month: "*"
 tarsnapper_default_target: "default/$name-$date"
 # default 'deltas' (backup frequency and lifetime) for backups that tarsnapper makes
 tarsnapper_default_deltas: "1d 7d 30d 365d"
+# Override to pass extra arguments to tarsnapper (e.g. --no-expire if your tarsnap key does not have delete permission)
+tarsnapper_job_command: "make"
 
 #tarsnap_global_exclusions:
 #  - "*.deb"

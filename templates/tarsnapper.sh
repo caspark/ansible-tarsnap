@@ -29,5 +29,5 @@ exec 2>&1
 # ###############################################################################
 log "backup generation START"
 # arguments to tarsnap (via -o) must be before arguments to tarsnapper
-tarsnapper -o configfile "{{ tarsnap_config_file }}" -c "{{ tarsnapper_config_file }}"  make
+tarsnapper -o configfile "{{ tarsnap_config_file }}" -c "{{ tarsnapper_config_file }}" {{ tarsnapper_job_command }}
 log "backup generation DONE"
