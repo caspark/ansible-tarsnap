@@ -19,3 +19,6 @@ tarsnapper_script_file: "/etc/tarsnapper/tarsnapper.sh"
 tarsnapper_include_jobs_dir: "/etc/tarsnapper/jobs.d"
 # path to create the tarsnapper virtualenv and hence the location to install tarsnapper to
 tarsnapper_virtualenv_path: "/opt/tarsnapper"
+# tarsnapper package to install via pip to the virtualenv at tarsnapper_virtualenv_path
+# tarsnapper in pypi (0.2.5 at time of writing) does not have https://github.com/miracle2k/tarsnapper/pull/37
+tarsnapper_package_name: "git+git://github.com/miracle2k/tarsnapper.git@6a5ab6f569e8d0209458c8eca331b42ae82cf279"

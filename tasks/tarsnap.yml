@@ -100,10 +100,12 @@
   command: virtualenv {{ tarsnapper_virtualenv_path }} --no-site-packages
            creates={{ tarsnapper_virtualenv_path }}/bin/activate
 
-- name: Install tarsnapper wrapper
-  pip:
-    name: tarsnapper
-    virtualenv: "{{ tarsnapper_virtualenv_path }}"
+- name: Install tarsnapper to virtualenv
+  # we use the shell module because in order to install from a git commit we need to set "editable: false" and that's
+  # only supported in ansible 2.0 or later, which isn't out as of 2015-01-09.
+  shell: '. {{ tarsnapper_virtualenv_path }}/bin/activate && pip install "{{ tarsnapper_package_name }}"'
+  args:
+    creates: "{{ tarsnapper_virtualenv_path }}/bin/tarsnapper"
 
 - name: Correct virtual env permissions
   file:
