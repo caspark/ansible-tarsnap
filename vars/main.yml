@@ -8,6 +8,8 @@ tarsnap_config_file: "/usr/local/etc/tarsnap.conf"
 tarsnap_log_file: "/var/log/tarsnap.log"
 # path the tarsnap cache should exist at
 tarsnap_cache: "/usr/local/tarsnap-cache"
+# path to build tarsnap in if it needs to be installed (will be deleted after build is complete)
+tarsnap_build_path: "/root/tarsnap-build"
 
 # path the tarsnapper config file should end up at
 tarsnapper_config_file: "/etc/tarsnapper/tarsnapper.conf"
