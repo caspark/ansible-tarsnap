@@ -72,6 +72,11 @@
 - name: Install Tarsnap configuration file
   template: src=tarsnaprc dest={{ tarsnap_config_file }} owner=root group=root mode=600
 
+- name: Install Tarsnap key file
+  copy:
+    content: "{{ tarsnap_key_content }}"
+    dest: "{{ tarsnap_key_file }}"
+
 - name: Create Tarsnapper directories
   file:
     state: directory
@@ -112,7 +117,7 @@
   cron:
     name: "Tarsnap backup"
     job: "{{ tarsnapper_script_file }} > /dev/null"
-    minute: "{{ tarsnap_cron_minute }}"
-    hour: "{{ tarsnap_cron_hour }}"
-    day: "{{ tarsnap_cron_day }}"
-    month: "{{ tarsnap_cron_month }}"
+    minute: "{{ tarsnapper_cron_minute }}"
+    hour: "{{ tarsnapper_cron_hour }}"
+    day: "{{ tarsnapper_cron_day }}"
+    month: "{{ tarsnapper_cron_month }}"

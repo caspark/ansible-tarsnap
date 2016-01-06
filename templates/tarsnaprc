@@ -5,7 +5,7 @@ humanize-numbers
 cachedir {{ tarsnap_cache }}
 
 # Tarsnap key file
-keyfile {{ tarsnap_keyfile }}
+keyfile {{ tarsnap_key_file }}
 
 # Don't archive files which have the nodump flag set
 nodump

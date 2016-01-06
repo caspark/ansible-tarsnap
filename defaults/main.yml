@@ -1,19 +1,23 @@
-tarsnap_version: 1.0.35
-tarsnap_keyfile: "/root/tarsnap.key"
-tarsnap_config_file: "/usr/local/etc/tarsnap.conf"
-tarsnap_log_file: "/var/log/tarsnap.log"
-tarsnap_cache: "/usr/local/tarsnap-cache"
-tarsnap_cron_minute: "0"
-tarsnap_cron_hour: "3"
-tarsnap_cron_day: "*"
-tarsnap_cron_month: "*"
+tarsnap_version: 1.0.36.1
 
-tarsnapper_config_file: "/etc/tarsnapper/tarsnapper.conf"
-tarsnapper_script_file: "/etc/tarsnapper/tarsnapper.sh"
+# the actual key that tarsnap should use (this is saved to tarsnap_key_file)
+tarsnap_key_content: |
+You must specify your own key for
+tarsnap here instead of using this one!
+If you do not override the tarsnap_key_content
+variable then tarsnap will not work.
+
+# the frequency with which tarsnapper is run. Must be at least as frequent as the smallest delta of any job.
+# here we run tarsnapper every hour, meaning backup jobs intended to backup more frequently than that will not do so.
+tarsnapper_cron_minute: "0"
+tarsnapper_cron_hour: "*"
+tarsnapper_cron_day: "*"
+tarsnapper_cron_month: "*"
+
+# default 'target' (archive name) for backups that tarsnapper makes. $name and $date are interpolated by tarsnapper.
 tarsnapper_default_target: "default/$name-$date"
+# default 'deltas' (backup frequency and lifetime) for backups that tarsnapper makes
 tarsnapper_default_deltas: "1d 7d 30d 365d"
-tarsnapper_include_jobs_dir: "/etc/tarsnapper/jobs.d/*"
-tarsnapper_virtualenv_path: "/root/tarsnapper-virtual-env"
 
 #tarsnap_global_exclusions:
 #  - "*.deb"
