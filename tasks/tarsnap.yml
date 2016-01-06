@@ -113,7 +113,7 @@
 - name: Configure tarsnap logrotate
   template: src=etc_logrotate_tarsnap dest=/etc/logrotate.d/tarsnap owner=root group=root mode=0644
 
-- name: Install nightly Tarsnap-generations cronjob
+- name: Install tarsnapper cronjob
   cron:
     name: "Tarsnap backup"
     job: "{{ tarsnapper_script_file }} > /dev/null"
