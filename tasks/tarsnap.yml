@@ -127,7 +127,7 @@
 
 - name: Install tarsnapper cronjob
   cron:
-    name: "Tarsnap backup"
+    name: "{{ tarsnapper_cron_job_name }} "
     job: "{{ tarsnapper_script_file }} > /dev/null"
     minute: "{{ tarsnapper_cron_minute }}"
     hour: "{{ tarsnapper_cron_hour }}"

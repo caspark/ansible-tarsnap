@@ -22,3 +22,5 @@ tarsnapper_virtualenv_path: "/opt/tarsnapper"
 # tarsnapper package to install via pip to the virtualenv at tarsnapper_virtualenv_path
 # tarsnapper in pypi (0.2.5 at time of writing) does not have https://github.com/miracle2k/tarsnapper/pull/37
 tarsnapper_package_name: "git+git://github.com/miracle2k/tarsnapper.git@6a5ab6f569e8d0209458c8eca331b42ae82cf279"
+# overwrite the name of the cron job if you want to run multiple tarsnapper configurations on the same machine
+tarsnapper_cron_job_name: Tarsnapper backup
