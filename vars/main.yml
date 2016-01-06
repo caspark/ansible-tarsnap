@@ -14,7 +14,7 @@ tarsnap_build_path: "/root/tarsnap-build"
 # path the tarsnapper config file should end up at
 tarsnapper_config_file: "/etc/tarsnapper/tarsnapper.conf"
 # path the tarsnapper run script should end up at
-tarsnapper_script_file: "/etc/tarsnapper/tarsnapper.sh"
+tarsnapper_script_file: "/usr/bin/tarsnapper_job"
 # path that tarsnapper jobs can be placed as separate yaml files
 tarsnapper_include_jobs_dir: "/etc/tarsnapper/jobs.d"
 # path to create the tarsnapper virtualenv and hence the location to install tarsnapper to
