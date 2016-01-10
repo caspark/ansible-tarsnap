@@ -7,6 +7,13 @@ tarsnap_key_content: |
     If you do not override the tarsnap_key_content
     variable then tarsnap will not work.
 
+# if you like, you can specify a alternate tarsnap key to copy to the server. This key won't be referenced by the config
+# file and will be unused under ordinary circumstances, but e.g. if your main tarsnap key is a write-only key, then you
+# can use this to also copy your passphrase-encrypted key with full permissions to the machine. If not set, this key
+# won't be copied over.
+# tarsnap_key_alternate_content: 'override my value'
+tarsnap_key_alternate_file: '/root/tarsnap-alternate.key'
+
 # the frequency with which tarsnapper is run. Must be at least as frequent as the smallest delta of any job.
 # here we run tarsnapper every hour, meaning backup jobs intended to backup more frequently than that will not do so.
 tarsnapper_cron_minute: "0"
