@@ -12,6 +12,7 @@
     - build-essential
     - python-pip
     - python-virtualenv
+    - git
 
 - name: Check if tarsnap {{ tarsnap_version }} is installed
   shell: tarsnap --version | grep {{ tarsnap_version }} --color=never
