@@ -103,7 +103,7 @@
 - name: Create Tarsnapper base directory and jobs include directory
   file:
     state: directory
-    path: "{{ tarsnapper_include_jobs_dir }}"
+    path: "{{ tarsnapper_include_jobs_path }}"
     owner: root
     group: root
     mode: u=rwX,g=,o=
