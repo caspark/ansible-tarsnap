@@ -3,7 +3,7 @@
 # path the tarsnap key should end up at
 tarsnap_key_file: "/root/tarsnap.key"
 # path the tarsnap config file should end up at
-tarsnap_config_file: "/usr/local/etc/tarsnap.conf"
+tarsnap_config_file: "/etc/tarsnap.conf"
 # path the tarsnap log file should end up at
 tarsnap_log_file: "/var/log/tarsnap.log"
 # path the tarsnap cache should exist at

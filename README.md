@@ -46,7 +46,6 @@ tarsnapper once a week on Sunday at 5am:
       # END OF TARSNAP KEY FILE
   roles:
   - role: ansible-tarsnap
-    tarsnap_version: 1.0.36.1
     tarsnap_key_file: "/root/tarsnap-write-only.key"
     tarsnap_key_content: "{{ tarsnap_key_content_write_only }}"
     tarsnap_key_alternate_file: "/root/tarsnap-full-perms.key"
@@ -76,7 +75,6 @@ If you're less paranoid, you can create a configuration which only defines 1 key
       # END OF TARSNAP KEY FILE
   roles:
   - role: ansible-tarsnap
-    tarsnap_version: 1.0.36.1
     # (you actually don't need the line below because it's the default location for the key)
     tarsnap_key_file: "/root/tarsnap.key"
     # (you actually don't need the line below because tarsnap_key_content is already in scope, but we're being explicit)

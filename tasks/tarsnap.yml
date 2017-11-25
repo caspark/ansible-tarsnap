@@ -3,79 +3,42 @@
 #   contributors:  al3x jplock lvillani lukecyca jsravn bcachet alexdunae pdebruic
 # The sovereign project source and this derivative work are licensed under the GNU General Public License v3.
 
-- name: Install dependencies for Tarsnap
+- name: Install dependencies for Tarsnap and Tarsnapper
   apt: pkg={{ item }} state=installed
   with_items:
-    - e2fslibs-dev
-    - libssl-dev
-    - zlib1g-dev
-    - build-essential
+    - ca-certificates
     - python-pip
     - python-virtualenv
     - git
 
-- name: Check if tarsnap {{ tarsnap_version }} is installed
-  shell: tarsnap --version | grep {{ tarsnap_version }} --color=never
+- name: Check if tarsnap is installed
+  shell: tarsnap --version
   register: tarsnap_installed
   changed_when: "tarsnap_installed.stderr != ''"
   ignore_errors: yes
 
-- name: Create directory to build tarsnap in
+- name: Add tarsnap apt key
   when: tarsnap_installed|failed
-  file: path="{{ tarsnap_build_path }}" state=directory owner=root group=root mode=0700
+  apt_key:
+    url: https://pkg.tarsnap.com/tarsnap-deb-packaging-key.asc
+    state: present
 
-- name: Download the current tarsnap code signing key
+- name: Add tarsnap apt repository
   when: tarsnap_installed|failed
-  get_url:
-    url=https://www.tarsnap.com/tarsnap-signing-key.asc
-    dest={{ tarsnap_build_path }}/tarsnap-signing-key.asc
+  apt_repository:
+    repo: "deb http://pkg.tarsnap.com/deb/{{ ansible_distribution_release }} ./"
+    state: present
 
-- name: Add the tarsnap code signing key to your list of keys
+- name: Update apt cache
   when: tarsnap_installed|failed
-  command:
-    gpg --import tarsnap-signing-key.asc
-    chdir={{ tarsnap_build_path }}
+  apt: update_cache=yes
 
-- name: Download tarsnap SHA file
+- name: Install tarsnap and possible key updates via apt
   when: tarsnap_installed|failed
-  get_url:
-    url="https://www.tarsnap.com/download/tarsnap-sigs-{{ tarsnap_version }}.asc"
-    dest="{{ tarsnap_build_path }}/tarsnap-sigs-{{ tarsnap_version }}.asc"
-
-- name: get the SHA256sum for this tarsnap release
-  when: tarsnap_installed|failed
-  shell: >
-    gpgResult=`gpg --decrypt tarsnap-sigs-{{ tarsnap_version }}.asc 2>/dev/null`;
-    echo ${gpgResult#*=};
-  args:
-    executable: /bin/bash
-    chdir: "{{ tarsnap_build_path }}"
-  register: tarsnap_sha
-
-- name: Download Tarsnap source
-  when: tarsnap_installed|failed
-  get_url:
-    url="https://www.tarsnap.com/download/tarsnap-autoconf-{{ tarsnap_version }}.tgz"
-    dest="{{ tarsnap_build_path }}/tarsnap-autoconf-{{ tarsnap_version }}.tgz"
-    sha256sum={{ tarsnap_sha.stdout_lines[0] }}
-
-- name: Decompress Tarsnap source
-  when: tarsnap_installed|failed
-  command: >
-    tar xzf {{ tarsnap_build_path }}/tarsnap-autoconf-{{ tarsnap_version }}.tgz chdir={{ tarsnap_build_path }}
-    creates={{ tarsnap_build_path }}/tarsnap-autoconf-{{ tarsnap_version }}/COPYING
-
-- name: Configure Tarsnap for local build
-  when: tarsnap_installed|failed
-  command: ./configure chdir={{ tarsnap_build_path }}/tarsnap-autoconf-{{ tarsnap_version }} creates={{ tarsnap_build_path }}/tarsnap-autoconf-{{ tarsnap_version }}/Makefile
-
-- name: Build and install Tarsnap
-  when: tarsnap_installed|failed
-  command: make all install clean chdir={{ tarsnap_build_path }}/tarsnap-autoconf-{{ tarsnap_version }} creates=/usr/local/bin/tarsnap
-
-- name: Delete temporary tarsnap build directory
-  when: tarsnap_installed|failed
-  file: path={{ tarsnap_build_path }} state=absent
+  apt: "pkg={{ item }} state=installed"
+  with_items:
+    - tarsnap
+    - tarsnap-archive-keyring
 
 - name: Create Tarsnap cache directory
   file: state=directory path={{ tarsnap_cache }} owner=root group=root mode=700
