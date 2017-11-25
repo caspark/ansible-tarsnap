@@ -11,8 +11,7 @@ It's a tweaked version of [pmbauer's ansible-tarsnap](https://github.com/pmbauer
 
  * Provide tarsnap key in a variable instead of having to use a separate play/role to set up the tarsnap key
  * Support for backups using write-only tarsnap keys (you'll need to handle expiry yourself then)
- * Support for placing an alternate tarsnap key on the system (e.g. a passphrase-protected key with read and delete
-   permissions so that it can be used to expire jobs)
+ * Support for placing an alternate tarsnap key on the system (e.g. a passphrase-protected key with read and delete permissions so that it can be used to expire jobs)
  * Allow locations of most installed files to be customized
  * Expects tarsnapper's [`include-jobs` directive](https://github.com/miracle2k/tarsnapper/issues/2) to be used
  * Locked down file permissions
