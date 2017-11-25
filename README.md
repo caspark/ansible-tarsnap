@@ -2,8 +2,7 @@
 
 # Ansible-tarsnap (tweaked)
 
-This is a ansible role for automating tarsnap backups on Ubuntu (tested on 14.04); it downloads sources for,
-verifies the gpg-encrypted sha signature, compiles, and installs [Tarsnap].
+This is an Ansible (>= v2.4) role for automating tarsnap backups on Ubuntu (tested on 14.04); it downloads sources for, verifies the gpg-encrypted sha signature, compiles, and installs [Tarsnap] and Tarsnapper.
 
 **Batteries included**: [tarsnapper], cron job, shell wrapper, and [logrotate] policy.
 
