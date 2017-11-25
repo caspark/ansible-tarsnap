@@ -15,8 +15,8 @@ It's a tweaked version of [pmbauer's ansible-tarsnap](https://github.com/pmbauer
  * Allow locations of most installed files to be customized
  * Expects tarsnapper's [`include-jobs` directive](https://github.com/miracle2k/tarsnapper/issues/2) to be used
  * Locked down file permissions
- * Cleans up tarsnap build files after building and installing tarsnap
- * Installs tarsnapper to its own python virtualenv rather than installing it system-wide
+ * Install tarsnap via the official debian repo rather than building from source
+ * Install tarsnapper to its own python virtualenv rather than installing it system-wide
 
 ## Requirements
 - [Tarsnap] account
